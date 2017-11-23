@@ -12,33 +12,37 @@ class Heap():
     def __str__(self):
         return str(self.heap[:self.heap_size])
 
-    # heap indexes range from 1 to heap_size. If we want to convert a heap index
-    # to list index, we should subtract 1 from the heap index
     def __left_index(self, i):
-        return 2*i
+        if i != 0:
+            return 2*i - 1
+        else:
+            return 1
 
     def __right_index(self, i):
-        return 2*i + 1
+        if i != 0:
+            return 2*i
+        else:
+            return 2
 
     def __parent_index(self, i):
-        return i//2
+        return i//2 - 1
 
     def __left(self, i):
         left_index = self.__left_index(i)
-        return self.heap[left_index-1]
+        return self.heap[left_index]
 
     def __right(self, i):
         right_index = self.__right_index(i)
-        return self.heap[right_index-1]
+        return self.heap[right_index]
 
     def __parent(self, i):
         parent_index = self.__parent_index(i)
-        return self.heap[parent_index-1]
+        return self.heap[parent_index]
 
     def __swap(self, first_index, second_index):
-        temp = self.heap[first_index-1]
-        self.heap[first_index-1] = self.heap[second_index-1]
-        self.heap[second_index-1] = temp
+        temp = self.heap[first_index]
+        self.heap[first_index] = self.heap[second_index]
+        self.heap[second_index] = temp
 
     def __heapify(self, i):
         left_index = self.__left_index(i)
@@ -46,11 +50,10 @@ class Heap():
 
         index_of_highest_element = i
 
-
-        if left_index <= self.heap_size and self.heap[i-1] < self.heap[left_index-1]:
+        if left_index < self.heap_size and self.heap[i] < self.heap[left_index]:
             index_of_highest_element = left_index
 
-        if right_index <= self.heap_size and self.heap[index_of_highest_element-1] < self.heap[right_index-1]:
+        if right_index < self.heap_size and self.heap[index_of_highest_element] < self.heap[right_index]:
             index_of_highest_element = right_index
         
         if index_of_highest_element is not i:
@@ -60,7 +63,7 @@ class Heap():
     def __build_max_heap(self):
         capacity = self.capacity()
 
-        for i in range(capacity//2, 0, -1):
+        for i in range(capacity//2, -1, -1):
             self.__heapify(i)
 
     def push(self, value):
@@ -78,8 +81,6 @@ class Heap():
             if self.heap_size > 0:
                 self.__build_max_heap()
             return top
-        else:
-            return "opa"
 
     def height(self):
         return int(math.log(self.heap_size, 2)) + 1
@@ -96,7 +97,9 @@ def heap_sort(list):
         max = heap.pop()
         list[i] = max
     
-    print(list)
+    return list
 
 
-heap_sort([20, 90, 40, 10, 30, 80, 70, 50, 60, 120, 110, 100])
+my_list = [20, 90, 40, 10, 30, 80, 70, 50, 60, 120, 110, 100]
+sorded_list = heap_sort(my_list)
+print(sorded_list)
